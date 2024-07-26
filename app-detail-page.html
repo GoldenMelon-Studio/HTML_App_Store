@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用详情 - 社交媒体</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: relative;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.5em; /* 调整标题字体大小 */
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: margin-left 0.3s ease;
+        }
+        .container.sidebar-closed {
+            margin: 0 auto; /* 侧边栏关闭时居中 */
+        }
+        .app-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        .app-info h1 {
+            margin: 0 0 10px 0;
+        }
+        .rating {
+            color: #f8ce0b;
+            font-size: 24px;
+        }
+        .screenshots {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .screenshot {
+            width: 32%;
+            border: 1px solid #ddd;
+        }
+        .description, .reviews {
+            margin-bottom: 20px;
+        }
+        .review {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .download-btn, .back-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        /* 侧边栏样式 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            transform: translateX(-250px);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+        .sidebar h2 {
+            margin-top: 2em; /* 使“侧边栏”标题下移 */
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        /* 汉堡菜单按钮样式 */
+        .hamburger {
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            cursor: pointer;
+            display: block;
+            z-index: 1;
+            margin-left: 1em; /* 为汉堡菜单按钮添加左侧外边距 */
+        }
+        .hamburger div {
+            width: 30px;
+            height: 4px;
+            background-color: white;
+            margin: 5px 0;
+        }
+        /* 大屏幕样式 */
+        @media (min-width: 768px) {
+            .container {
+                margin-left: 270px; /* 大屏幕默认显示侧边栏，内容区右移，并留出间距 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <h1>应用商店</h1>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <h2>侧边栏</h2>
+        <a href="#">链接 1</a><br>
+        <a href="#">链接 2</a><br>
+        <a href="#">链接 3</a>
+    </div>
+
+    <div class="container sidebar-closed" id="container">
+        <a href="#" class="back-btn">返回</a>
+        <div class="app-header">
+            <img src="/api/placeholder/100/100" alt="社交媒体图标" class="app-icon">
+            <div class="app-info">
+                <h1>社交媒体</h1>
+                <p>开发者：科技公司</p>
+                <div class="rating">★★★★☆ 4.5</div>
+            </div>
+        </div>
+        <a href="#" class="download-btn">下载应用</a>
+        <div class="screenshots">
+            <img src="/api/placeholder/200/400" alt="截图1" class="screenshot">
+            <img src="/api/placeholder/200/400" alt="截图2" class="screenshot">
+            <img src="/api/placeholder/200/400" alt="截图3" class="screenshot">
+        </div>
+        <div class="description">
+            <h2>应用描述</h2>
+            <p>这是一款功能强大的社交媒体应用，让您轻松与朋友保持联系。分享照片、视频，发布状态更新，并实时与好友聊天。我们的应用注重隐私保护，提供个性化的用户体验。</p>
+        </div>
+        <div class="reviews">
+            <h2>用户评价</h2>
+            <div class="giscus">
+                <script src="https://giscus.app/client.js"
+                    data-repo="OWNER/REPO"
+                    data-repo-id="REPO_ID"
+                    data-category="Announcements"
+                    data-category-id="CATEGORY_ID"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="top"
+                    data-theme="light"
+                    data-lang="zh-CN"
+                    crossorigin="anonymous"
+                    async>
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const container = document.getElementById('container');
+            const isOpen = sidebar.classList.toggle('open');
+            container.classList.toggle('sidebar-closed', !isOpen);
+        });
+
+        // 大屏幕默认打开侧边栏
+        if (window.innerWidth >= 768) {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('container').classList.remove('sidebar-closed');
+            document.getElementById('container').classList.add('sidebar-open');
+        }
+    </script>
+</body>
+</html>

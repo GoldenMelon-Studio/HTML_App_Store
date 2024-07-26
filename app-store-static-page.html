@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用商店</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: relative;
+        }
+        h1 {
+            margin: 0;
+        }
+        .search-container {
+            text-align: center;
+            margin: 1em;
+            transition: margin-left 0.3s ease;
+        }
+        #search-input {
+            width: 60%;
+            padding: 0.5em;
+            font-size: 1em;
+        }
+        #search-button {
+            padding: 0.5em 1em;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1em;
+            padding: 1em;
+            transition: margin-left 0.3s ease;
+            margin-left: 1em; /* 为应用卡片添加左侧外边距 */
+            margin-right: 1em; /* 为应用卡片添加右侧外边距 */
+        }
+        .app-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1em;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .app-card a {
+            color: black;
+            text-decoration: none;
+        }
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 0.5em;
+        }
+        /* 侧边栏样式 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            transform: translateX(-250px);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+        .sidebar h2 {
+            margin-top: 2em; /* 使“侧边栏”标题下移 */
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        /* 汉堡菜单按钮样式 */
+        .hamburger {
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            cursor: pointer;
+            display: block;
+            z-index: 1;
+            margin-left: 1em; /* 为汉堡菜单按钮添加左侧外边距 */
+        }
+        .hamburger div {
+            width: 30px;
+            height: 4px;
+            background-color: white;
+            margin: 5px 0;
+        }
+        /* 大屏幕样式 */
+        @media (min-width: 768px) {
+            .app-grid {
+                margin-left: 270px; /* 大屏幕默认显示侧边栏，内容区右移，并留出间距 */
+                margin-right: 1em; /* 为应用卡片添加右侧外边距 */
+            }
+            .search-container {
+                margin-left: 270px; /* 大屏幕默认显示侧边栏时，搜索框右移，并留出间距 */
+                margin-right: 1em; /* 为搜索容器添加右侧外边距 */
+            }
+            .app-grid.sidebar-closed,
+            .search-container.sidebar-closed {
+                margin-left: 1em; /* 侧边栏关闭时，内容区恢复，并留出间距 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <h1>应用商店</h1>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <h2>侧边栏</h2>
+        <a href="#">链接 1</a><br>
+        <a href="#">链接 2</a><br>
+        <a href="#">链接 3</a>
+    </div>
+
+    <div class="search-container sidebar-closed" id="search-container">
+        <input type="text" id="search-input" placeholder="搜索应用...">
+        <button id="search-button">搜索</button>
+    </div>
+
+    <div class="app-grid sidebar-closed" id="app-grid">
+        <!-- 应用卡片将通过JavaScript动态添加 -->
+    </div>
+    
+    <script>
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const appGrid = document.getElementById('app-grid');
+            const searchContainer = document.getElementById('search-container');
+            const isOpen = sidebar.classList.toggle('open');
+            appGrid.classList.toggle('sidebar-closed', !isOpen);
+            searchContainer.classList.toggle('sidebar-closed', !isOpen);
+        });
+
+        const apps = [
+            { name: "社交媒体", icon: "/api/placeholder/64/64", link: "https://store.example.com/social" },
+            { name: "音乐播放器", icon: "/api/placeholder/64/64", link: "https://store.example.com/music" },
+            { name: "天气预报", icon: "/api/placeholder/64/64", link: "https://store.example.com/weather" },
+            { name: "待办事项", icon: "/api/placeholder/64/64", link: "https://store.example.com/todo" },
+            { name: "相机", icon: "/api/placeholder/64/64", link: "https://store.example.com/camera" },
+            { name: "日历", icon: "/api/placeholder/64/64", link: "https://store.example.com/calendar" },
+            { name: "计算器", icon: "/api/placeholder/64/64", link: "https://store.example.com/calculator" },
+            { name: "笔记", icon: "/api/placeholder/64/64", link: "https://store.example.com/notes" },
+            { name: "小圆", icon: "/api/placeholder/64/64", link: "https://store.example.com/madoka" },
+            { name: "圆环之理", icon: "/api/placeholder/64/64", link: "https://store.example.com/kami" }
+        ];
+
+        function renderApps(appsToRender) {
+            const appGrid = document.getElementById('app-grid');
+            appGrid.innerHTML = '';
+            appsToRender.forEach(app => {
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.innerHTML = `
+                    <a href="${app.link}" target="_blank">
+                        <img src="${app.icon}" alt="${app.name}" class="app-icon">
+                        <h3>${app.name}</h3>
+                    </a>
+                `;
+                appGrid.appendChild(appCard);
+            });
+        }
+
+        function searchApps() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm));
+            renderApps(filteredApps);
+        }
+
+        document.getElementById('search-button').addEventListener('click', searchApps);
+        document.getElementById('search-input').addEventListener('keyup', event => {
+            if (event.key === 'Enter') {
+                searchApps();
+            }
+        });
+
+        // 初始渲染所有应用
+        renderApps(apps);
+
+        // 大屏幕默认打开侧边栏
+        if (window.innerWidth >= 768) {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('app-grid').classList.remove('sidebar-closed');
+            document.getElementById('app-grid').classList.add('sidebar-open');
+            document.getElementById('search-container').classList.remove('sidebar-closed');
+            document.getElementById('search-container').classList.add('sidebar-open');
+        }
+    </script>
+</body>
+</html>
