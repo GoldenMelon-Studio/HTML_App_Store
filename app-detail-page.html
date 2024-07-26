@@ -18,21 +18,20 @@
             text-align: center;
             padding: 1em;
             position: relative;
+            margin-bottom: 20px;
         }
         h1 {
             margin: 0;
-            font-size: 1.5em; /* 调整标题字体大小 */
+            font-size: 1.5em;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: calc(100% - 40px);
+            margin: 20px auto;
             padding: 20px;
             background-color: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            transition: margin-left 0.3s ease;
-        }
-        .container.sidebar-closed {
-            margin: 0 auto; /* 侧边栏关闭时居中 */
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            box-sizing: border-box;
         }
         .app-header {
             display: flex;
@@ -55,10 +54,12 @@
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         .screenshot {
             width: 32%;
             border: 1px solid #ddd;
+            margin-bottom: 10px;
         }
         .description, .reviews {
             margin-bottom: 20px;
@@ -92,7 +93,7 @@
             box-sizing: border-box;
         }
         .sidebar h2 {
-            margin-top: 2em; /* 使“侧边栏”标题下移 */
+            margin-top: 2em;
         }
         .sidebar a {
             color: white;
@@ -109,7 +110,6 @@
             cursor: pointer;
             display: block;
             z-index: 1;
-            margin-left: 1em; /* 为汉堡菜单按钮添加左侧外边距 */
         }
         .hamburger div {
             width: 30px;
@@ -117,10 +117,32 @@
             background-color: white;
             margin: 5px 0;
         }
+        /* 小屏幕样式 */
+        @media (max-width: 767px) {
+            .container {
+                width: calc(100% - 20px); /* 确保内容区在小屏幕上与窗口边缘有间隙 */
+                margin: 10px auto; /* 确保内容区在小屏幕上居中显示 */
+            }
+            .sidebar {
+                width: 200px; /* 调整侧边栏宽度以适应小屏幕 */
+                transform: translateX(-200px);
+            }
+        }
         /* 大屏幕样式 */
         @media (min-width: 768px) {
             .container {
-                margin-left: 270px; /* 大屏幕默认显示侧边栏，内容区右移，并留出间距 */
+                width: calc(100% - 40px);
+                margin-left: 20px; /* 默认居中显示 */
+                margin-right: 20px; /* 确保内容区与窗口右边缘有间隙 */
+                transition: margin-left 0.3s ease, width 0.3s ease;
+            }
+            .container.sidebar-open {
+                width: calc(100% - 270px - 40px); /* 内容区在侧边栏打开时占用剩余空间 */
+                margin-left: 270px; /* 内容区右移以避免被侧边栏挡住 */
+            }
+            .container.sidebar-closed {
+                width: calc(100% - 40px); /* 内容区在侧边栏关闭时占用整个窗口宽度减去边缘间隙 */
+                margin-left: 20px;
             }
         }
     </style>
@@ -189,14 +211,22 @@
             const sidebar = document.getElementById('sidebar');
             const container = document.getElementById('container');
             const isOpen = sidebar.classList.toggle('open');
-            container.classList.toggle('sidebar-closed', !isOpen);
+            if (window.innerWidth >= 768) {
+                if (isOpen) {
+                    container.classList.add('sidebar-open');
+                    container.classList.remove('sidebar-closed');
+                } else {
+                    container.classList.remove('sidebar-open');
+                    container.classList.add('sidebar-closed');
+                }
+            }
         });
 
         // 大屏幕默认打开侧边栏
         if (window.innerWidth >= 768) {
             document.getElementById('sidebar').classList.add('open');
-            document.getElementById('container').classList.remove('sidebar-closed');
             document.getElementById('container').classList.add('sidebar-open');
+            document.getElementById('container').classList.remove('sidebar-closed');
         }
     </script>
 </body>
