@@ -68,7 +68,7 @@
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
-        .download-btn, .back-btn {
+        .back-btn {
             display: inline-block;
             background-color: #4CAF50;
             color: white;
@@ -78,6 +78,92 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            font-size: 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.3s;
+            width: 350px;
+            height: 60px;
+            text-align: center;
+        }
+
+        .btn .circle, .btn .loading-text {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .btn .circle {
+            border: 3px solid white;
+            border-radius: 50%;
+            border-top: 3px solid transparent;
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 15px;
+            transition: left 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn.active {
+            background-color: #28a745;
+            cursor: default;
+        }
+
+        .btn.active .circle {
+            opacity: 1;
+        }
+
+        .btn.active .loading-text {
+            opacity: 1;
+        }
+
+        .checkmark {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            opacity: 1;
+        }
+
+        .checkmark::before {
+            content: '';
+            position: absolute;
+            top: 7px;
+            left: 12.5px;
+            width: 7px;
+            height: 14px;
+            border: solid #28a745;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .loading-text {
+            font-size: 20px;
+            line-height: 60px;
+        }
+
         /* 侧边栏样式 */
         .sidebar {
             position: fixed;
@@ -174,7 +260,15 @@
                 <div class="rating">★★★★☆ 4.5</div>
             </div>
         </div>
-        <a href="#" class="download-btn">下载应用</a>
+
+        <!-- 替换后的按钮 -->
+        <button class="btn" id="payButton">
+            <span class="text">支付 M$ 20</span>
+            <div class="circle"></div>
+            <span class="loading-text">正在支付……</span>
+            <div class="checkmark"></div>
+        </button>
+
         <div class="screenshots">
             <img src="/api/placeholder/200/400" alt="截图1" class="screenshot">
             <img src="/api/placeholder/200/400" alt="截图2" class="screenshot">
@@ -228,6 +322,52 @@
             document.getElementById('container').classList.add('sidebar-open');
             document.getElementById('container').classList.remove('sidebar-closed');
         }
+
+// 按钮的 JavaScript 逻辑
+var random_num = Math.floor(Math.random() * 3001) + 500;
+document.getElementById('payButton').addEventListener('click', function() {
+    var button = this;
+    if (button.classList.contains('active')) {
+        return;
+    }
+
+    var text = button.querySelector('.text');
+    var circle = button.querySelector('.circle');
+    var loadingText = button.querySelector('.loading-text');
+    var checkmark = button.querySelector('.checkmark');
+
+    text.style.display = 'none';
+    circle.style.display = 'inline-block';
+    loadingText.style.display = 'inline';
+
+    // 淡入
+    setTimeout(function() {
+        circle.style.opacity = '1';
+        loadingText.style.opacity = '1';
+    }, 10);
+
+    setTimeout(function() {
+        loadingText.style.display = 'none';
+        circle.style.left = 'calc(50% - 0px)';
+        circle.style.transform = 'translateX(0)';
+        circle.style.backgroundColor = '#28a745';
+        circle.style.borderWidth = '0';
+
+        setTimeout(function() {
+            circle.style.display = 'none';
+            checkmark.style.display = 'block';
+
+            // 在显示绿色勾之后 100ms 跳转到 example.com
+            setTimeout(function() {
+                window.location.href = 'https://example.com';
+            }, 100);
+
+        }, 300);
+
+        button.classList.add('active');
+    }, random_num);
+});
+
     </script>
 </body>
 </html>
